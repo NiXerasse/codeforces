@@ -1,5 +1,6 @@
 import sys
 
+
 def get_z(s):
     z = [0] * len(s)
     l, r = 0, 1
@@ -11,6 +12,7 @@ def get_z(s):
         if i + z[i] > r:
             l, r = i, i + z[i]
     return z
+
 
 n, cn = map(int, sys.stdin.readline().split())
 s = sys.stdin.readline().strip().split()
