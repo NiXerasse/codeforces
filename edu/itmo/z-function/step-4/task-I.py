@@ -1,20 +1,27 @@
 import sys
 
 
-def get_z(s, k):
-    z = [[0, 0] for _ in range(len(s))]
-    l, r = 5, [7, 2]
-    for i in range(5, len(s)):
-        if r[0] >= i:
-            z[i] = min(z[i - l], [r[0] - i, r[1]])
-        while z[i][0] + i < len(s) and (s[z[i][0]] == s[i + z[i][0]] or z[i][1] < k):
-            z[i][1] += s[z[i][0]] != s[i + z[i][0]]
-            z[i][0] += 1
-        if i + z[i][0] > r[0]:
-            l, r = i, [i + z[i][0], z[i][1]]
+def get_z(s):
+    z = [0] * len(s)
+    l, r = 0, 1
+    for i in range(1, len(s)):
+        if r > i:
+            z[i] = min(z[i - l], r - i)
+        while z[i] + i < len(s) and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] > r:
+            l, r = i, i + z[i]
     return z
 
 
-# s = sys.stdin.readline().strip()
-s = "aaa$$abacaaa"
-print(get_z(s, 1))
+s = sys.stdin.readline().strip()
+p = sys.stdin.readline().strip()
+k = int(sys.stdin.readline().strip())
+z1 = get_z(p + "$" + s)
+z2 = get_z(p[::-1] + "$" + s[::-1])
+r = []
+for i in range(len(s) - len(p) + 1):
+    if len(p) - (z1[len(p) + i + 1] + z2[len(s) - i + 1]) <= k:
+        r.append(i + 1)
+sys.stdout.write(f'{len(r)}\n')
+sys.stdout.write(' '.join(map(str, r)))
